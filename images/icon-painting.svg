@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Paint Palette -->
+  <path d="M80 50C80 67.6731 65.6731 82 48 82C30.3269 82 16 67.6731 16 50C16 32.3269 30.3269 18 48 18C65.6731 18 80 32.3269 80 50Z" fill="#FF9AC7" stroke="black" stroke-width="2"/>
+  
+  <!-- Paint Blobs -->
+  <circle cx="35" cy="35" r="8" fill="#FFE066" stroke="black" stroke-width="1.5"/>
+  <circle cx="35" cy="65" r="8" fill="#66D7D1" stroke="black" stroke-width="1.5"/>
+  <circle cx="65" cy="50" r="8" fill="#FC6471" stroke="black" stroke-width="1.5"/>
+  <circle cx="50" cy="30" r="8" fill="#87DEFF" stroke="black" stroke-width="1.5"/>
+  <circle cx="50" cy="70" r="8" fill="#A5D6A7" stroke="black" stroke-width="1.5"/>
+  
+  <!-- Paintbrush -->
+  <path d="M75 20L85 10L90 15L80 25L75 20Z" fill="#F5DEB3" stroke="black" stroke-width="1.5"/>
+  <path d="M50 45L75 20L80 25L55 50L50 45Z" fill="#F5DEB3" stroke="black" stroke-width="1.5"/>
+  <path d="M45 50L50 45L55 50L50 55L45 50Z" fill="#FF9AC7" stroke="black" stroke-width="1.5"/>
+  
+  <!-- Thumb Hole -->
+  <path d="M25 50C25 52.7614 22.7614 55 20 55C17.2386 55 15 52.7614 15 50C15 47.2386 17.2386 45 20 45C22.7614 45 25 47.2386 25 50Z" fill="white" stroke="black" stroke-width="1.5"/>
+</svg> 

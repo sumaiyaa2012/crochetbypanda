@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="500" height="500" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Panda Body -->
+  <ellipse cx="250" cy="280" rx="120" ry="130" fill="white" stroke="black" stroke-width="4"/>
+  
+  <!-- Panda Head -->
+  <circle cx="250" cy="180" r="100" fill="white" stroke="black" stroke-width="4"/>
+  
+  <!-- Panda Ears -->
+  <circle cx="170" cy="110" r="40" fill="black" stroke="black" stroke-width="4"/>
+  <circle cx="330" cy="110" r="40" fill="black" stroke="black" stroke-width="4"/>
+  
+  <!-- Panda Eyes -->
+  <ellipse cx="210" cy="170" rx="25" ry="30" fill="black" stroke="black" stroke-width="2"/>
+  <ellipse cx="290" cy="170" rx="25" ry="30" fill="black" stroke="black" stroke-width="2"/>
+  
+  <!-- Eye Highlights -->
+  <circle cx="200" cy="160" r="8" fill="white"/>
+  <circle cx="280" cy="160" r="8" fill="white"/>
+  
+  <!-- Panda Nose -->
+  <ellipse cx="250" cy="200" rx="15" ry="10" fill="black" stroke="black" stroke-width="2"/>
+  
+  <!-- Panda Mouth -->
+  <path d="M230 220 Q250 235 270 220" stroke="black" stroke-width="3" fill="none"/>
+  
+  <!-- Panda Arms -->
+  <path d="M170 260 Q130 200 100 180" stroke="black" stroke-width="4" fill="white"/>
+  <circle cx="100" cy="180" r="25" fill="white" stroke="black" stroke-width="4"/>
+  
+  <!-- Waving Arm (with animation) -->
+  <g class="waving-arm">
+    <path d="M330 260 Q380 220 420 240" stroke="black" stroke-width="4" fill="white">
+      <animateTransform
+        attributeName="transform"
+        attributeType="XML"
+        type="rotate"
+        from="0 330 260"
+        to="20 330 260"
+        dur="0.8s"
+        repeatCount="indefinite"
+        additive="sum"
+        calcMode="spline"
+        keySplines="0.4 0 0.6 1; 0.4 0 0.6 1"
+        values="0 330 260; 20 330 260; 0 330 260"
+      />
+    </path>
+    <circle cx="420" cy="240" r="25" fill="white" stroke="black" stroke-width="4">
+      <animateTransform
+        attributeName="transform"
+        attributeType="XML"
+        type="rotate"
+        from="0 330 260"
+        to="20 330 260"
+        dur="0.8s"
+        repeatCount="indefinite"
+        additive="sum"
+        calcMode="spline"
+        keySplines="0.4 0 0.6 1; 0.4 0 0.6 1"
+        values="0 330 260; 20 330 260; 0 330 260"
+      />
+    </circle>
+  </g>
+  
+  <!-- Panda Legs -->
+  <path d="M200 380 Q180 430 190 450" stroke="black" stroke-width="4" fill="white"/>
+  <ellipse cx="190" cy="450" rx="20" ry="15" fill="white" stroke="black" stroke-width="4"/>
+  
+  <path d="M300 380 Q320 430 310 450" stroke="black" stroke-width="4" fill="white"/>
+  <ellipse cx="310" cy="450" rx="20" ry="15" fill="white" stroke="black" stroke-width="4"/>
+  
+  <!-- Panda Belly -->
+  <ellipse cx="250" cy="300" rx="60" ry="70" fill="white" stroke="black" stroke-width="2"/>
+  
+  <!-- Pink Accents -->
+  <circle cx="250" cy="300" r="20" fill="#ffcce0" opacity="0.6"/>
+  <circle cx="200" cy="280" r="15" fill="#ffcce0" opacity="0.6"/>
+  <circle cx="300" cy="280" r="15" fill="#ffcce0" opacity="0.6"/>
+  
+  <!-- Bamboo -->
+  <rect x="60" y="350" width="15" height="100" fill="#7FBF7F" stroke="#2E8B57" stroke-width="2"/>
+  <rect x="75" y="370" width="15" height="80" fill="#7FBF7F" stroke="#2E8B57" stroke-width="2"/>
+  <rect x="45" y="370" width="15" height="80" fill="#7FBF7F" stroke="#2E8B57" stroke-width="2"/>
+  <ellipse cx="67.5" cy="350" rx="15" ry="5" fill="#7FBF7F" stroke="#2E8B57" stroke-width="2"/>
+  <ellipse cx="82.5" cy="370" rx="15" ry="5" fill="#7FBF7F" stroke="#2E8B57" stroke-width="2"/>
+  <ellipse cx="52.5" cy="370" rx="15" ry="5" fill="#7FBF7F" stroke="#2E8B57" stroke-width="2"/>
+  
+  <!-- Cute Blush -->
+  <ellipse cx="200" cy="190" rx="20" ry="10" fill="#FF9AC7" opacity="0.5"/>
+  <ellipse cx="300" cy="190" rx="20" ry="10" fill="#FF9AC7" opacity="0.5"/>
+</svg> 
