@@ -294,42 +294,50 @@
         <img src="images/floating-panda.svg" alt="Floating Panda">
     </div>
 
+    <!-- Chatbot -->
+    <div class="chatbot-container" id="chatbot">
+        <div class="chatbot-header">
+            <h3>Panda Assistant</h3>
+            <button id="closeChat" class="close-chat">&times;</button>
+        </div>
+        <div class="chatbot-messages" id="chatMessages">
+            <!-- Chat messages will appear here -->
+        </div>
+        <div class="chatbot-input">
+            <input type="text" id="userMessage" placeholder="Type your message...">
+            <button id="sendMessage"><i class="fas fa-paper-plane"></i></button>
+        </div>
+        <div class="chatbot-settings">
+            <button id="settingsButton"><i class="fas fa-cog"></i></button>
+        </div>
+    </div>
+
+    <div class="chat-button" id="openChat">
+        <i class="fas fa-comment"></i>
+    </div>
+
+    <!-- Chatbot Settings Modal -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3>Chatbot Settings</h3>
+            <div class="form-group">
+                <label for="apiKey">Your Groq API Key:</label>
+                <input type="password" id="apiKey" placeholder="Enter your Groq API key">
+                <button id="saveApiKey" class="btn primary-btn">Save API Key</button>
+            </div>
+            <div class="form-group">
+                <button id="clearChat" class="btn secondary-btn">Clear Chat History</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Back to Top Button -->
     <a href="#home" class="back-to-top">
         <i class="fas fa-arrow-up"></i>
     </a>
 
-    <!-- JavaScript -->
+        <!-- JavaScript -->
     <script src="js/script.js"></script>
-    <script>
-// Web3Forms AJAX submission
-const contactForm = document.getElementById('contactForm');
-const formStatus = document.getElementById('form-status');
-if(contactForm) {
-  contactForm.addEventListener('submit', async function(e) {
-    e.preventDefault();
-    formStatus.textContent = 'Sending...';
-    const formData = new FormData(contactForm);
-    try {
-      const response = await fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        body: formData
-      });
-      const result = await response.json();
-      if(result.success) {
-        formStatus.style.color = 'green';
-        formStatus.textContent = 'Thank you! Your message has been sent.';
-        contactForm.reset();
-      } else {
-        formStatus.style.color = 'red';
-        formStatus.textContent = 'Oops! Something went wrong. Please try again.';
-      }
-    } catch (error) {
-      formStatus.style.color = 'red';
-      formStatus.textContent = 'Network error. Please try again later.';
-    }
-  });
-}
-</script>
 </body>
 </html> 

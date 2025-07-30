@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initScrollEffects();
     initThemeToggle();
     initContactForm();
+    initChatbot(); // Initialize the chatbot
 });
 
 // Navigation functionality
@@ -262,9 +263,10 @@ function initThemeToggle() {
 // Contact form functionality
 function initContactForm() {
     const contactForm = document.getElementById('contactForm');
+    const formStatus = document.getElementById('form-status');
     
     if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
+        contactForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             
             // Get form values
@@ -286,20 +288,239 @@ function initContactForm() {
                 return;
             }
             
-            // Form submission simulation
+            // Form submission using Web3Forms
+            formStatus.textContent = 'Sending...';
             const submitBtn = contactForm.querySelector('.submit-btn');
             const originalText = submitBtn.textContent;
             
             submitBtn.disabled = true;
-            submitBtn.textContent = 'Sending...';
             
-            // Simulate form submission (would be replaced with actual API call)
-            setTimeout(() => {
-                alert('Thank you for your message! I will get back to you soon.');
-                contactForm.reset();
+            // Prepare form data
+            const formData = new FormData(contactForm);
+            
+            try {
+                const response = await fetch('https://api.web3forms.com/submit', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    formStatus.style.color = 'green';
+                    formStatus.textContent = 'Thank you! Your message has been sent.';
+                    contactForm.reset();
+                } else {
+                    formStatus.style.color = 'red';
+                    formStatus.textContent = 'Oops! Something went wrong. Please try again.';
+                }
+            } catch (error) {
+                formStatus.style.color = 'red';
+                formStatus.textContent = 'Network error. Please try again later.';
+                console.error('Contact form error:', error);
+            } finally {
                 submitBtn.disabled = false;
                 submitBtn.textContent = originalText;
-            }, 1500);
+            }
         });
+    }
+} 
+
+// Chatbot functionality
+function initChatbot() {
+    const chatbot = document.getElementById('chatbot');
+    const openChatBtn = document.getElementById('openChat');
+    const closeChatBtn = document.getElementById('closeChat');
+    const settingsBtn = document.getElementById('settingsButton');
+    const settingsModal = document.getElementById('settingsModal');
+    const closeModalBtn = document.querySelector('.close-modal');
+    const apiKeyInput = document.getElementById('apiKey');
+    const saveApiKeyBtn = document.getElementById('saveApiKey');
+    const clearChatBtn = document.getElementById('clearChat');
+    const chatMessages = document.getElementById('chatMessages');
+    const userMessageInput = document.getElementById('userMessage');
+    const sendMessageBtn = document.getElementById('sendMessage');
+
+    // Load saved API key and chat history on page load
+    let apiKey = localStorage.getItem('groqApiKey') || '';
+    let chatHistory = JSON.parse(localStorage.getItem('chatHistory')) || [];
+
+    // Pre-fill API key if it exists
+    if (apiKey) {
+        apiKeyInput.value = apiKey;
+        // Show a masked version for security
+        const maskedKey = '*'.repeat(apiKey.length - 4) + apiKey.slice(-4);
+        apiKeyInput.setAttribute('placeholder', maskedKey);
+    }
+
+    // Load chat history
+    function loadChatHistory() {
+        chatMessages.innerHTML = '';
+        chatHistory.forEach(message => {
+            appendMessage(message.sender, message.text);
+        });
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // Append a message to the chat
+    function appendMessage(sender, text) {
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add('chat-message', sender === 'bot' ? 'bot-message' : 'user-message');
+        messageDiv.innerHTML = `
+            <div class="message-content">
+                ${text}
+            </div>
+        `;
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        // Save to chat history
+        if (!messageDiv.classList.contains('typing')) {
+            chatHistory.push({ sender, text });
+            localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
+        }
+    }
+
+    // Send message to Groq API
+    async function sendToGroq(message) {
+        if (!apiKey) {
+            appendMessage('bot', 'Please set your Groq API key in the settings.');
+            settingsModal.style.display = 'block';
+            return;
+        }
+
+        appendMessage('user', message);
+        
+        // Show typing indicator
+        const typingDiv = document.createElement('div');
+        typingDiv.classList.add('chat-message', 'bot-message', 'typing');
+        typingDiv.innerHTML = '<div class="message-content">Typing...</div>';
+        chatMessages.appendChild(typingDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        try {
+            const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey}`
+                },
+                body: JSON.stringify({
+                    model: 'llama3-8b-8192',
+                    messages: [
+                        {
+                            role: 'system',
+                            content: 'You are a helpful panda assistant for a craft portfolio website. You help with questions about crochet, knitting, and creative projects.'
+                        },
+                        {
+                            role: 'user',
+                            content: message
+                        }
+                    ],
+                    temperature: 0.7,
+                    max_tokens: 800
+                })
+            });
+
+            // Remove typing indicator
+            chatMessages.removeChild(typingDiv);
+
+            if (!response.ok) {
+                throw new Error('API request failed');
+            }
+
+            const data = await response.json();
+            const botReply = data.choices[0].message.content;
+            appendMessage('bot', botReply);
+        } catch (error) {
+            // Remove typing indicator
+            chatMessages.removeChild(typingDiv);
+            appendMessage('bot', 'Sorry, there was an error communicating with the AI. Please check your API key and try again.');
+            console.error('Error:', error);
+        }
+    }
+
+    // Event Listeners
+    if (openChatBtn) {
+        openChatBtn.addEventListener('click', function() {
+            chatbot.classList.add('active');
+            loadChatHistory();
+        });
+    }
+
+    if (closeChatBtn) {
+        closeChatBtn.addEventListener('click', function() {
+            chatbot.classList.remove('active');
+        });
+    }
+
+    if (settingsBtn) {
+        settingsBtn.addEventListener('click', function() {
+            settingsModal.style.display = 'block';
+        });
+    }
+
+    if (closeModalBtn) {
+        closeModalBtn.addEventListener('click', function() {
+            settingsModal.style.display = 'none';
+        });
+    }
+
+    if (saveApiKeyBtn) {
+        saveApiKeyBtn.addEventListener('click', function() {
+            apiKey = apiKeyInput.value.trim();
+            if (apiKey) {
+                localStorage.setItem('groqApiKey', apiKey);
+                alert('API key saved successfully!');
+                settingsModal.style.display = 'none';
+            } else {
+                alert('Please enter a valid API key');
+            }
+        });
+    }
+
+    if (clearChatBtn) {
+        clearChatBtn.addEventListener('click', function() {
+            if (confirm('Are you sure you want to clear your chat history?')) {
+                chatHistory = [];
+                localStorage.removeItem('chatHistory');
+                chatMessages.innerHTML = '';
+                alert('Chat history cleared');
+            }
+        });
+    }
+
+    if (sendMessageBtn) {
+        sendMessageBtn.addEventListener('click', function() {
+            const message = userMessageInput.value.trim();
+            if (message) {
+                sendToGroq(message);
+                userMessageInput.value = '';
+            }
+        });
+    }
+
+    if (userMessageInput) {
+        userMessageInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const message = userMessageInput.value.trim();
+                if (message) {
+                    sendToGroq(message);
+                    userMessageInput.value = '';
+                }
+            }
+        });
+    }
+
+    // Close modal when clicking outside of it
+    window.addEventListener('click', function(event) {
+        if (event.target === settingsModal) {
+            settingsModal.style.display = 'none';
+        }
+    });
+
+    // Add welcome message if this is the first time
+    if (chatHistory.length === 0) {
+        appendMessage('bot', 'Hello! I\'m your Panda Assistant. How can I help with your crafting project today?');
     }
 } 
